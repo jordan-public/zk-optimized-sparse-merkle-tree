@@ -2,16 +2,16 @@
     "compilerOptions": {
         "baseUrl": ".",
         "strict": true,
-        "lib": ["esnext"],
+        "lib": ["esnext", "dom"],
         "target": "esnext",
-        "module": "commonjs",
+        "module": "none",
         "moduleResolution": "node",
         "esModuleInterop": true,
         "preserveConstEnums": true,
         "skipLibCheck": true,
         "declaration": true,
         "allowSyntheticDefaultImports": true,
-        "declarationDir": "src/types",
+        "noEmitOnError": true,
         "typeRoots": ["node_modules/@types", "types"],
     },
     "ts-node": {
@@ -20,5 +20,5 @@
             "module": "commonjs"
         }
     },
-    "include": ["src", "tests", "rollup.config.ts"]
+    "include": ["src", "tests", "rollup.config.ts", "play.ts"]
 }

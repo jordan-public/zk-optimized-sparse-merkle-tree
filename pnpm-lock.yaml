@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  '@types/circomlibjs':
+    specifier: ^0.1.5
+    version: 0.1.5
   '@types/crypto-js':
     specifier: ^4.1.1
     version: 4.1.3
@@ -448,6 +451,10 @@ packages:
 
   /@tsconfig/node16@1.0.4:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+    dev: true
+
+  /@types/circomlibjs@0.1.5:
+    resolution: {integrity: sha512-UqLjjcMTB/Bbe28LvdoNEdXg4oAwM6xD5uf+uImv7nR5mjRntaD8qEy9RnAA32nkP+Ik1sxBh7gTboyKX6lklA==}
     dev: true
 
   /@types/crypto-js@4.1.3:
