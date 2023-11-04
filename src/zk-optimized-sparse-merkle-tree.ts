@@ -91,7 +91,7 @@ export default class SparseMerkleTree {
      * @param key A key of a tree entry.
      * @returns A value of a tree entry, 0 if not found.
      */
-    get(path: Path): Hash {
+    get(key: Key): Hash {
         this.assertType(key)
         const hashes = this.retrieve(key)
         return hashes[hashes.length - 1]
@@ -121,7 +121,7 @@ export default class SparseMerkleTree {
         const hashes = this.retrieve(key)
         if (hashes[hashes.length - 1] === valueHash) return // Nothing to update, the value is the same.
 
-        const path = keyToPath(key)
+        const path = this.keyToPath(key)
         let nodesOnPath : Node[] = [this.root];
         for (let i = 0; i < path.length; i += 1) {
             const childNodes = this.nodes.get(nodesOnPath[nodesOnPath.length-1])
@@ -145,14 +145,14 @@ export default class SparseMerkleTree {
             // Now all empty subtrees on the path are removed.
         } else { // valueHash !== this.zero, so addition
             // Build the subtree from the bottom up
-            const leafNode = [valueHash, this.zero];
-            let childNodes = path[path.length-1] ? [leafNode, [this.zero, this.zero]] : [[this.zero, this.zero], leafNode];
+            const leafNode = [valueHash, this.zero] as Node;
+            let childNodes = (path[path.length-1] ? [leafNode, [this.zero, this.zero]] : [[this.zero, this.zero], leafNode]) as ChildNodes;
             for (let i = path.length; i > nodesOnPath.length; i += 1) {
                 // Create a node with 1 non-zero child and 1 zero child
-                const newNode = [this.hash(childNodes[0][0], childNodes[0][1]), this.hash(childNodes[1][0], childNodes[1][1])]; 
-                this.nodes.add(newNode, childNodes);
+                const newNode = [this.hash(childNodes[0][0], childNodes[0][1]), this.hash(childNodes[1][0], childNodes[1][1])] as Node; 
+                this.nodes.set(newNode, childNodes);
                 if (i>0) // The root has no parent
-                    childNodes = path[i-1] ? [newNode, [this.zero, this.zero]] : [[this.zero, this.zero], newNode];
+                    childNodes = (path[i-1] ? [newNode, [this.zero, this.zero]] : [[this.zero, this.zero], newNode]) as ChildNodes;
             }
             if (nodesOnPath.length > 0 ) // The root has no parent
                 nodesOnPath[nodesOnPath.length-1][path[nodesOnPath.length-1]] = // Update parent; by reference - the map of Nodes is updated, too
@@ -186,7 +186,7 @@ export default class SparseMerkleTree {
     createProof(key: Key): MerkleProof {
         this.assertType(key)
         const siblings = this.retrieve(key)
-        const valueHash = siblings.pop()
+        const valueHash = siblings.pop() as Hash
         const rootHash = this.hash(this.root[0], this.root[1])
 
         return { valueHash, rootHash, key, siblings }
@@ -198,7 +198,7 @@ export default class SparseMerkleTree {
      * @returns True if the proof is valid, false otherwise.
      */
     verifyProof(proof: MerkleProof): boolean {
-        const path = keyToPath(proof.key)
+        const path = this.keyToPath(proof.key)
         let nodeHash = proof.valueHash
         for (let i = proof.siblings.length - 1; i >= 0; i -= 1) {
             nodeHash = path[i] ? this.hash(proof.siblings[i], nodeHash) : this.hash(nodeHash, proof.siblings[i])
@@ -215,7 +215,7 @@ export default class SparseMerkleTree {
      * @returns Siblings' hashes list, except in the last place contains the hash of value of the entry sought.
      */
     private retrieve(key: bigint | string): Hash[] {
-        const path = keyToPath(key)
+        const path = this.keyToPath(key)
         const hashes: Siblings = []
 
         // Starts from the root and goes down into the tree until it finds
