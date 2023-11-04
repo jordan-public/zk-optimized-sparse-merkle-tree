@@ -13,6 +13,8 @@
         "allowSyntheticDefaultImports": true,
         "noEmitOnError": true,
         "typeRoots": ["node_modules/@types", "types"],
+        "outDir": "out",
+        "sourceMap": true,
     },
     "ts-node": {
         "compilerOptions": {

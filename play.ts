@@ -3,9 +3,11 @@ import sha256 from "crypto-js/sha256"
 import { buildPoseidon } from "circomlibjs"
 
 async function main() {
+    const depth = 8
+
     // Hexadecimal hashes.
     const hash = (left: Hash, right: Hash) => sha256(left as string + right as string).toString()
-    const tree = new SparseMerkleTree(hash, 3)
+    const tree = new SparseMerkleTree(hash, depth)
 
     // Big number hashes.
     const poseidon = await buildPoseidon()
@@ -18,10 +20,18 @@ async function main() {
         return BigInt(hex);
     }  
     const hash2 = (left: Hash, right: Hash) => toBigInt(poseidon([left, right]))
-    const tree2 = new SparseMerkleTree(hash2, 3, true)
+    const tree2 = new SparseMerkleTree(hash2, depth, true)
 
     console.log(tree.root) // 0
     console.log(tree2.root) // 0n
+
+    tree.add("2b", "44") // Hexadecimal key/value.
+    tree.add("16", "78")
+    tree.add("d", "e7")
+    tree.add("10", "141")
+    tree.add("20", "340")
+
+    console.log(tree.root)
 }
 
 main()
