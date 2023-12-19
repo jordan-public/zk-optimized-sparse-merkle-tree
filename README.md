@@ -18,4 +18,12 @@
 
 ## Install
 
+pnpm install
+
 ## Usage
+
+Temporary:
+```
+ts-node play.ts
+```
+
