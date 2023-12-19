@@ -86,8 +86,9 @@ export default class SparseMerkleTree {
     }
 
     /**
-     * Gets a key and if the key exists in the tree the function returns the
-     * value, otherwise it returns 'undefined'.
+     * Gets a key, and if the key exists in the tree,
+     * the function returns the value, 
+     * otherwise it returns 'undefined'.
      * @param key A key of a tree entry.
      * @returns A value of a tree entry, 0 if not found.
      */
